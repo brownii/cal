@@ -77,7 +77,7 @@ public class Cal {
                 System.exit(0);
             } else {
                 try {
-                    System.out.println(new BigDecimal(Double.toString(Cal.calculator(string))).stripTrailingZeros());
+                    System.out.println(new BigDecimal(Double.toString(Cal.calculator(string))).stripTrailingZeros().toPlainString());
                 } catch (Exception e) {
                     System.out.println(string);
                 }
