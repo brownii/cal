@@ -7,14 +7,14 @@ import java.util.function.BiFunction;
  * @author  brownii
  */
 public class Cal {
-    public static final byte LEVEL1 = 1;
-    public static final byte LEVEL2 = 2;
-    public static final byte LEVEL3 = 3;
+    static final byte LEVEL1 = 1;
+    static final byte LEVEL2 = 2;
+    static final byte LEVEL3 = 3;
 
     /**
      * 建立总栈
      */
-    private static Stack<MyStack> stacks = new Stack<>();
+    private static final Stack<MyStack> stacks = new Stack<>();
 
     /**
      * @param string 计算语句
@@ -33,19 +33,17 @@ public class Cal {
                 }
                 handleCal();
                 j = i + 1;
-            } else if (!Character.isDigit(c) && c != '(' && c != ')') {
+            } else if (!Character.isDigit(c)) {
                 handleCal();
                 for (Operation operation : Operation.values()) {
                     if (c == operation.getSymbol()) {
                         if (operation.getLevel() == LEVEL1) {
                             stacks.push(new MyStack());
-                            stacks.peek().push(operation);
-                            j = i + 1;
                         } else {
                             stacks.peek().push(Double.parseDouble(string.substring(j, i)));
-                            stacks.peek().push(operation);
-                            j = i + 1;
                         }
+                        stacks.peek().push(operation);
+                        j = i + 1;
                         break;
                     }
                 }
@@ -79,7 +77,7 @@ public class Cal {
                 System.exit(0);
             } else {
                 try {
-                    System.out.println(new BigDecimal(Double.toString(Cal.calculator(string))));
+                    System.out.println(new BigDecimal(Double.toString(Cal.calculator(string))).stripTrailingZeros());
                 } catch (Exception e) {
                     System.out.println(string);
                 }
@@ -92,7 +90,7 @@ enum Operation {
     /**
      * 加法
      */
-    Plus(Cal.LEVEL3, '+', (x, y) -> x + y),
+    Plus(Cal.LEVEL3, '+', Double::sum),
     /**
      * 减法
      */
@@ -144,7 +142,7 @@ enum Operation {
     }
 }
 
-class MyStack extends Stack {
+class MyStack extends Stack<Object> {
     private static final long serialVersionUID = 1L;
 
     public double cal() {
