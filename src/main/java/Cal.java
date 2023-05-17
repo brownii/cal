@@ -68,6 +68,7 @@ public class Cal {
     public static void main(String[] args) {
         System.out.println("welcome to brownii calculator");
         Scanner scanner = new Scanner(System.in);
+        String lastResult = null;
         while (true) {
             stacks.clear();
             String string = scanner.nextLine();
@@ -77,7 +78,13 @@ public class Cal {
                 System.exit(0);
             } else {
                 try {
-                    System.out.println(new BigDecimal(Double.toString(Cal.calculator(string))).stripTrailingZeros().toPlainString());
+                    if (string.startsWith("+") || string.startsWith("-") || string.startsWith("*") || string.startsWith("/")) {
+                        if (lastResult != null) {
+                            string = lastResult + string;
+                        }
+                    }
+                    lastResult = new BigDecimal(Double.toString(Cal.calculator(string))).stripTrailingZeros().toPlainString();
+                    System.out.println(lastResult);
                 } catch (Exception e) {
                     System.out.println(string);
                 }
